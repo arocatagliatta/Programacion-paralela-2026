@@ -1,0 +1,63 @@
+# ==============================================================================
+# Doxyfile — Configuración de Doxygen para el proyecto K-Means OpenMP
+# ==============================================================================
+# Generar documentación HTML:
+#   doxygen Doxyfile
+# O desde CMake:
+#   cmake --build build --target docs
+# ==============================================================================
+
+# ── Información del proyecto ──────────────────────────────────────────────────
+PROJECT_NAME           = "K-Means Paralelo con OpenMP"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF          = "Clustering K-Means secuencial y paralelo sobre datos de varianza de movimiento"
+OUTPUT_DIRECTORY       = docs
+
+# ── Archivos de entrada ───────────────────────────────────────────────────────
+INPUT                  = src include
+FILE_PATTERNS          = *.c *.h
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */build/* */.git/*
+
+# ── Extracción de documentación ───────────────────────────────────────────────
+# EXTRACT_ALL = NO → solo documenta lo que tiene comentarios Doxygen.
+# Cambiar a YES para listar también entidades sin documentar.
+EXTRACT_ALL            = NO
+EXTRACT_STATIC         = YES
+EXTRACT_PRIVATE        = NO
+
+# ── Salida HTML ───────────────────────────────────────────────────────────────
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_COLORSTYLE        = AUTO_LIGHT
+
+# Desactiva LaTeX para mantener el build liviano.
+GENERATE_LATEX         = NO
+
+# ── Diagrama de dependencias entre archivos (requiere Graphviz/dot) ───────────
+HAVE_DOT               = NO
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+
+# ── Calidad de la documentación ───────────────────────────────────────────────
+# Warn si hay parámetros documentados con @param pero no declarados en el código.
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES
+
+# ── Estilo de comentarios soportados ─────────────────────────────────────────
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = NO
+
+# ── Orden de miembros en la salida ────────────────────────────────────────────
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = YES
+
+# ── Índice de búsqueda en HTML ────────────────────────────────────────────────
+SEARCHENGINE           = YES
+
+# ── Apariencia ───────────────────────────────────────────────────────────────
+SHOW_FILES             = YES
+SHOW_NAMESPACES        = YES
+SHOW_INCLUDE_FILES     = YES
+INLINE_SOURCES         = NO
+SOURCE_BROWSER         = YES

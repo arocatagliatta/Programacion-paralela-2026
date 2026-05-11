@@ -1,0 +1,27 @@
+# Carpeta generada por CMake — no forma parte del código fuente
+build/
+
+# Archivos intermedios de CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ejecutables generados (Linux/macOS y Windows)
+kmeans_seq
+kmeans_omp
+kmeans_seq.exe
+kmeans_omp.exe
+
+# Documentación generada por Doxygen
+docs/
+
+# Archivos de planificación internos — no se entregan
+plan.md
+plan_refactorizacion.md
+plan_de_refactorizacion.md
+plan_facturacion.md
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
