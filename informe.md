@@ -895,9 +895,9 @@ FUNCIÓN kmeans_omp(points[], n, K, centroids[], MAX_ITER, TOLERANCE):
 
 ---
 
-## 24. Qué Debería Poder Defender Oralmente
+## 24. Preguntas Técnicas Frecuentes
 
-A continuación se listan preguntas típicas que podría hacer el profesor en la defensa oral, con respuestas sugeridas.
+A continuación se resumen preguntas técnicas habituales sobre la implementación, junto con respuestas breves de referencia.
 
 ---
 
@@ -987,4 +987,8 @@ El código cumple todos los requisitos de la consigna: aplica K-Means sobre ambo
 
 Desde el punto de vista de ingeniería de software, el proyecto adopta una arquitectura modular: el código fuente está separado en `src/`, los headers en `include/`, los datasets en `data/`, y el benchmark en `scripts/`. La compilación oficial se realiza con CMake, que gestiona flags, dependencias y la integración con OpenMP de forma portable.
 
-El benchmark valida empíricamente la ganancia de rendimiento que aporta OpenMP y permite cuantificar el speedup, conectando la teoría del paralelismo con resultados concretos y medibles sobre datos reales.
+Los resultados experimentales confirman que la paralelización con OpenMP mejora de forma clara el tiempo de ejecución en ambos datasets. En `movisA.csv`, la versión secuencial promedió `0.1970 s`, mientras que la versión paralela alcanzó speedups de `1.60x` con 1 hilo, `2.81x` con 2 hilos, `3.57x` con 4 hilos y `3.58x` con 8 hilos. En `movisB.csv`, la versión secuencial promedió `0.1487 s`, y la versión paralela obtuvo `1.13x`, `1.64x`, `2.16x` y `2.18x` de speedup para 1, 2, 4 y 8 hilos respectivamente.
+
+Estos valores muestran dos comportamientos importantes. Por un lado, la implementación paralela logra una aceleración efectiva incluso con pocos hilos, lo que valida la elección de OpenMP para este problema. Por otro lado, la mejora deja de crecer de manera significativa al pasar de 4 a 8 hilos, especialmente en `movisA.csv`, lo que refleja los límites esperables de la paralelización real: costo de sincronización, fracción secuencial del algoritmo, competencia por caché y saturación de los recursos de hardware.
+
+En síntesis, el benchmark no solo verifica que la solución paralela funciona correctamente, sino que también demuestra una mejora medible y consistente respecto de la versión secuencial, conectando la teoría del paralelismo con evidencia experimental concreta.

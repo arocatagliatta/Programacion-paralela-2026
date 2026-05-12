@@ -35,7 +35,7 @@ movimiento en 4 categorías. El proyecto incluye una versión **secuencial** y u
 
 | Herramienta | Versión mínima |
 |---|---|
-| GCC con soporte OpenMP | 9.x |
+| GCC o Clang con soporte OpenMP | 9.x |
 | CMake | 3.16 |
 | Python | 3.8 |
 | Doxygen (opcional) | 1.9 |
@@ -43,6 +43,11 @@ movimiento en 4 categorías. El proyecto incluye una versión **secuencial** y u
 En sistemas Debian/Ubuntu:
 ```bash
 sudo apt install gcc cmake python3 doxygen
+```
+
+En macOS con Homebrew:
+```bash
+brew install cmake libomp
 ```
 
 ## Compilación
@@ -53,6 +58,10 @@ cd build
 cmake ..
 cmake --build .
 ```
+
+En macOS con AppleClang, `cmake` detecta automáticamente `libomp` si está
+instalado con Homebrew. Si no lo está, la configuración falla con un mensaje
+indicando que primero ejecutes `brew install libomp`.
 
 En Windows con MinGW, reemplazar `cmake ..` por:
 

@@ -13,8 +13,64 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # ── OpenMP ────────────────────────────────────────────────────────────────────
 # find_package detecta la flag correcta según el compilador activo:
 #   GCC/Clang → -fopenmp   |   MSVC → /openmp
-# REQUIRED hace fallar el configure si OpenMP no está disponible.
-find_package(OpenMP REQUIRED)
+#
+# En macOS con AppleClang, OpenMP no viene habilitado por defecto: necesitamos
+# el runtime libomp instalado (por ejemplo con Homebrew) y pasarle a CMake las
+# rutas del header y la biblioteca.
+if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+    set(_openmp_hint_paths
+        /opt/homebrew/opt/libomp
+        /usr/local/opt/libomp
+    )
+
+    find_program(HOMEBREW_EXECUTABLE brew)
+    if(HOMEBREW_EXECUTABLE)
+        execute_process(
+            COMMAND ${HOMEBREW_EXECUTABLE} --prefix libomp
+            OUTPUT_VARIABLE HOMEBREW_LIBOMP_PREFIX
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+
+        if(HOMEBREW_LIBOMP_PREFIX)
+            list(PREPEND _openmp_hint_paths "${HOMEBREW_LIBOMP_PREFIX}")
+        endif()
+    endif()
+
+    find_path(OpenMP_C_INCLUDE_DIR
+        NAMES omp.h
+        PATHS ${_openmp_hint_paths}
+        PATH_SUFFIXES include
+    )
+    find_library(OpenMP_libomp_LIBRARY
+        NAMES omp
+        PATHS ${_openmp_hint_paths}
+        PATH_SUFFIXES lib
+    )
+
+    if(OpenMP_C_INCLUDE_DIR AND OpenMP_libomp_LIBRARY)
+        set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
+        set(OpenMP_C_LIB_NAMES "omp")
+        set(OpenMP_omp_LIBRARY "${OpenMP_libomp_LIBRARY}")
+    endif()
+endif()
+
+find_package(OpenMP QUIET)
+
+if(NOT OpenMP_C_FOUND)
+    if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+        message(FATAL_ERROR
+            "No se pudo encontrar OpenMP para AppleClang.\n"
+            "Instala el runtime con Homebrew: brew install libomp\n"
+            "Luego vuelve a configurar con: cmake -S . -B build"
+        )
+    else()
+        message(FATAL_ERROR
+            "No se pudo encontrar OpenMP C. Verifica que tu compilador tenga "
+            "soporte OpenMP y que el runtime correspondiente este instalado."
+        )
+    endif()
+endif()
 
 # ── Headers compartidos ───────────────────────────────────────────────────────
 include_directories(include)
